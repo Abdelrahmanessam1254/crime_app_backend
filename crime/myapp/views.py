@@ -1,7 +1,7 @@
 # views.py
 import base64
 from io import BytesIO
-from tkinter import Image
+from PIL import Image
 import uuid
 from rest_framework import status
 from rest_framework.response import Response
