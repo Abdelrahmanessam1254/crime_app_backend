@@ -1,19 +1,38 @@
 # views.py
 import base64
 from PIL import Image
-import uuid
-from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
-from django.core.cache import cache
 import random
 from firebase_admin import auth
-from rest_framework import status
 import logging
+import time
+import threading
+import numpy as np
+import cv2
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+from deepface import DeepFace
+from pymongo import MongoClient
+import gridfs
+import uuid
+import tempfile
+from drf_yasg.utils import swagger_auto_schema
+from .serializers import EmailVerificationSerializer
+from sendgrid.helpers.mail import Mail, Email, To, Content
+from django.core.cache import cache
+from rest_framework import status
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Email, To, Content, Mail
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # Make sure this is at the top of settings.py
 # Configure logger
 logger = logging.getLogger(__name__)
 
@@ -184,20 +203,6 @@ def comment_detail(request, pk):
         comment.delete()
         return Response({'message': 'Comment deleted successfully'}, status=status.HTTP_200_OK)
     
-
-from .serializers import EmailVerificationSerializer
-from sendgrid.helpers.mail import Mail, Email, To, Content
-from django.core.cache import cache
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from rest_framework import status
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Email, To, Content, Mail
-import os
-from dotenv import load_dotenv
-
-load_dotenv()  # Make sure this is at the top of settings.py
-
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 
@@ -347,23 +352,6 @@ def get_comments_for_post(request, pk):
     }
 
     return Response(response_data, status=status.HTTP_200_OK)
-
-import os
-import time
-import threading
-import numpy as np
-import cv2
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
-from deepface import DeepFace
-from pymongo import MongoClient
-import gridfs
-from PIL import Image
-import uuid
-import tempfile
-from rest_framework.decorators import api_view
-from drf_yasg.utils import swagger_auto_schema
 
 # --- MongoDB Connection ---
 MONGO_URI = os.getenv("MONGO_URI")
