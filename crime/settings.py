@@ -10,17 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-from dotenv import load_dotenv
 import os
 from pathlib import Path
-import logging
-load_dotenv()
-
-SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
-DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-DATABASE_URL = os.getenv("DATABASE_PUBLIC_URL")  # Test if it's being read
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
