@@ -1,11 +1,12 @@
 FROM python:3.10.0-slim
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 ENV PORT=8000
 
 WORKDIR /app
 
+# Install system dependencies for OpenCV and others
 RUN apt-get update && apt-get install -y \
     libgl1-mesa-glx \
     libglib2.0-0 \
@@ -14,11 +15,25 @@ RUN apt-get update && apt-get install -y \
     libxext6 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Copy and install Python dependencies
 COPY requirements.txt .
 RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
+# Copy app files
 COPY . .
 
+# Collect static files
 RUN python manage.py collectstatic --noinput
 
-CMD gunicorn crime.wsgi:application --bind 0.0.0.0:$PORT
+# Debug step: Verify libGL and cv2 import
+RUN ldconfig -p | grep libGL.so.1 && \
+    python -c "import cv2; print('cv2 version:', cv2.__version__)"
+
+# Optional: Run Django system checks to catch config errors early
+RUN python manage.py check --deploy
+
+# You can also run your tests here if you have any (uncomment if needed)
+# RUN python manage.py test
+
+# Default command to start Gunicorn
+CMD ["gunicorn", "crime.wsgi:application", "--bind", "0.0.0.0:8000"]
