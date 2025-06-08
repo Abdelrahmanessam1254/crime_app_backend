@@ -8,7 +8,7 @@ nixPkgs = [
   "mesa",            # Provides libGL.so.1
   "libxext",         # Correct lowercase spelling
   "libxrender",      # Correct lowercase spelling
-  "libSM"            # MUST be spelled as "libSM" (case-sensitive match in Nix)
+  "libsm"            # MUST be spelled as "libSM" (case-sensitive match in Nix)
 ]
 
 [variables]
