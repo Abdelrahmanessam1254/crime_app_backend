@@ -1,7 +1,6 @@
 # views.py
 import base64
-from io import BytesIO
-from tkinter import Image
+from PIL import Image
 import uuid
 from rest_framework import status
 from rest_framework.response import Response
@@ -10,8 +9,6 @@ from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
-from django.conf import settings
-from django.utils.crypto import get_random_string
 from django.core.cache import cache
 import random
 from firebase_admin import auth
@@ -190,13 +187,10 @@ def comment_detail(request, pk):
 
 from .serializers import EmailVerificationSerializer
 from sendgrid.helpers.mail import Mail, Email, To, Content
-from django.conf import settings
-
 from django.core.cache import cache
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
-from django.conf import settings
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Email, To, Content, Mail
 import os
