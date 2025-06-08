@@ -1,9 +1,15 @@
 [build]
 builder = "NIXPACKS"
-plan = "python"
 
 [phases.setup]
-nixPkgs = ["python310", "libGL", "glib", "libSM", "libXrender", "libXext"]
+nixPkgs = [
+  "python310",
+  "mesa",            # Provides libGL
+  "glib",
+  "libxext",         # lowercase, correct derivation
+  "libxrender",
+  "libsm"            # lowercase, correct derivation
+]
 
 [variables]
 PYTHON_VERSION = "3.10"
