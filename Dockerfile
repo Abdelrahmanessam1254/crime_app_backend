@@ -32,5 +32,7 @@ RUN python manage.py collectstatic --noinput
 # Expose port (optional)
 EXPOSE 8000
 
+ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+
 CMD ["gunicorn", "crime.wsgi:application", "--bind", "0.0.0.0:8000"]
 
