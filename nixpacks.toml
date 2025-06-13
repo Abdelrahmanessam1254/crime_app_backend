@@ -1,0 +1,16 @@
+[build]
+nixPkgs = ["python310"]
+
+[phases.setup]
+nixPkgs = ["python310", "python310Packages.virtualenv"]
+
+[phases.install]
+cmds = [
+  "python -m venv /opt/venv",
+  ". /opt/venv/bin/activate",
+  "pip install --upgrade pip",
+  "pip install -r requirements.txt"
+]
+
+[start]
+cmd = "gunicorn crime.wsgi:application --bind 0.0.0.0:$PORT"
