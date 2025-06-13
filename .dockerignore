@@ -3,6 +3,11 @@ __pycache__/
 *.pyo
 *.pyd
 *.db
-.env
 *.sqlite3
-node_modules/
+*.log
+*.env
+.env.*
+.git
+.gitignore
+tests/
+media/
